@@ -42,15 +42,15 @@ function clean() {
   return del("dist");
 }
 
-// 🔹 Включение HTML-файлов с корректным путем
+// 🔹 Включение HTML-файлов
 function includeHtml() {
   return gulp
-    .src("src/html/**/*.html")
+    .src("src/html/*.html")
     .pipe(plumber())
     .pipe(
       include({
-        prefix: "@@", // Префикс для вставки
-        basepath: "src/html/blocks" // Правильный путь к блокам
+        prefix: "@@", 
+        basepath: "src/html/blocks" 
       })
     )
     .pipe(formatHtml()) // Форматируем HTML
@@ -103,22 +103,25 @@ function jsCopy() {
 // 🔹 Копирование статических файлов
 function copy() {
   return gulp
-    .src(resources.static, { base: "src" })
+    .src(resources.static, {
+      base: "src",
+      encoding: false
+    })
     .pipe(gulp.dest("dist/"));
 }
 
 // 🔹 Оптимизация изображений
 function images() {
   return gulp
-    .src(resources.images)
+    .src(resources.images, { encoding: false })
     .pipe(
       imagemin([
         imagemin_gifsicle({ interlaced: true }),
         imagemin_mozjpeg({ quality: 100, progressive: true }),
-        imagemin_optipng({ optimizationLevel: 3 })
+        imagemin_optipng({ optimizationLevel: 5 })
       ])
     )
-    .pipe(gulp.dest("dist/assets/images"));
+    .pipe(gulp.dest('dist/assets/images'));
 }
 
 // 🔹 Создание SVG-спрайта
